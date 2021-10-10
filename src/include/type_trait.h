@@ -45,7 +45,7 @@ namespace remove_const_volatile {
 
     template<typename T>
     struct remove_cv {
-
+        using type = T;
     };
 
     template<typename T>
@@ -67,27 +67,94 @@ namespace remove_const_volatile {
     using remove_cv_t = typename remove_cv<T>::type;
 };
 
+/*Type relationships*/
+namespace type_relationships {
+    template<typename T, typename U>
+    struct is_same : public false_type {
+
+    };
+
+    template<typename T>
+    struct is_same<T, T> : public true_type {
+
+    };
+
+    template<typename T, typename U>
+    inline constexpr bool is_same_v = is_same<T, U>::value;
+}
+
 /*Prmary type categories*/
 namespace type_categories{
-    // template<typename T>
-    // struct is_void_helper : public false_type {
+    using namespace remove_const_volatile;
+    using namespace type_relationships;
 
-    // };
+    template<typename T>
+    struct is_void_helper : public false_type {
 
-    // template<>
-    // struct is_void_helper<void> : public true_type {
+    };
 
-    // };
+    template<>
+    struct is_void_helper<void> : public true_type {
 
-    // template<typename T>
-    // struct is_void : public is_void_helper<remove_cv<T>> {
+    };
 
-    // };
+    template<typename T>
+    struct is_void : public is_void_helper<remove_cv_t<T>> {
 
-    // template<typename T>
-    // struct is_void : is_same<void, remove_cv<T>> {
+    };
 
-    // };
+/* Other implementation of is_void
+    template<typename T>
+    struct is_void : public is_same<void, remove_cv_t<T>> {
+
+    };
+*/
+    template<typename T>
+
+    inline constexpr bool is_void_v = is_void<T>::value;
+
+/* Another implementation of is_null_pointer
+    template<typename T>
+    struct is_null_pointer_helper : public false_type {
+
+    };
+
+    template<>
+    struct is_null_pointer_helper<decltype(nullptr)> : public true_type {
+
+    };
+
+    template<typename T>
+    struct is_null_pointer : public is_null_pointer_helper<remove_cv_t<T>> {
+
+    };
+*/
+
+    template<typename T>
+    struct is_null_pointer : is_same<decltype(nullptr), remove_cv_t<T>> {
+
+    };
+    
+    template<typename T>
+    inline constexpr bool is_null_pointer_v = is_null_pointer<T>::value;
+
+    template<typename T>
+    struct is_integral : false_type {
+
+    };
+
+    template<>
+    struct is_integral<bool> : true_type {
+
+    };
+
+    template<>
+    struct is_integral<char> : true_type {
+
+    };
+
+    template<typename T>
+    inline constexpr bool is_integral_v = is_integral<T>::value;
 }
 
 /*Miscellaneous transformations*/
@@ -106,21 +173,21 @@ namespace transformation {
     using enable_if_t = typename enable_if<B, T>::type;
 }
 
-/*Type relationships*/
-namespace type_relationships {
-    template<typename T, typename U>
-    struct is_same : public false_type {
+// /*Type relationships*/
+// namespace type_relationships {
+//     template<typename T, typename U>
+//     struct is_same : public false_type {
 
-    };
+//     };
 
-    template<typename T>
-    struct is_same<T, T> : public true_type {
+//     template<typename T>
+//     struct is_same<T, T> : public true_type {
 
-    };
+//     };
 
-    template<typename T, typename U>
-    inline constexpr bool is_same_v = is_same<T, U>::value;
-}
+//     template<typename T, typename U>
+//     inline constexpr bool is_same_v = is_same<T, U>::value;
+// }
 
 
 /*const-volatility specifiers*/

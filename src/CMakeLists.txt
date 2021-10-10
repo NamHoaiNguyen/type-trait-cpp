@@ -12,6 +12,8 @@ if(Boost_FOUND)
 
     include_directories("${CMAKE_SOURCE_DIR}/include")
 
+    include_directories("${CMAKE_SOURCE_DIR}/utils")
+
     add_executable(type_trait ${PROJECT_SOURCE_DIR}/test/test.cc)
 
 endif()
