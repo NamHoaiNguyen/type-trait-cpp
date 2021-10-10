@@ -50,9 +50,37 @@ BOOST_AUTO_TEST_CASE(test_type_categories) {
     BOOST_TEST(bool(is_null_pointer<int*>::value) == false);
 
     class A {};
+    enum E {};
+    BOOST_TEST(bool(is_integral_v<bool>) == true);
     BOOST_TEST(bool(is_integral_v<char>) == true);
+    BOOST_TEST(bool(is_integral_v<char16_t>) == true);
+    BOOST_TEST(bool(is_integral_v<char32_t>) == true);
+    BOOST_TEST(bool(is_integral_v<wchar_t>) == true);
+    BOOST_TEST(bool(is_integral_v<short>) == true);
+    BOOST_TEST(bool(is_integral_v<int>) == true);
+    BOOST_TEST(bool(is_integral_v<long>) == true);
+    BOOST_TEST(bool(is_integral_v<long long>) == true);
     BOOST_TEST(bool(is_integral_v<A>) == false);
+    BOOST_TEST(bool(is_integral_v<E>) == false);
+    BOOST_TEST(bool(is_integral_v<float>) == false);
 
+
+    BOOST_TEST(bool(is_floating_point_v<float>) == true);
+    BOOST_TEST(bool(is_floating_point_v<double>) == true);
+    BOOST_TEST(bool(is_floating_point_v<long double>) == true);
+    BOOST_TEST(bool(is_floating_point_v<int*>) == false);
+
+    class C{};
+    BOOST_TEST(bool(is_array_v<int* const volatile>) == false);
+    BOOST_TEST(bool(is_array_v<int[]>) == true);
+    BOOST_TEST(bool(is_array_v<float[10]>) == true);
+    BOOST_TEST(bool(is_array_v<C>) == false);
+    BOOST_TEST(bool(is_array_v<C[10]>) == true);
+    BOOST_TEST(bool(is_array_v<C[]>) == true);
+
+    union U{};
+    BOOST_TEST(bool(is_enum_v<E>) == true);
+    BOOST_TEST(bool(is_union_v<U>) == true);
 }
 
 BOOST_AUTO_TEST_CASE(test_reference) {

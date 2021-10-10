@@ -131,7 +131,7 @@ namespace type_categories{
 */
 
     template<typename T>
-    struct is_null_pointer : is_same<decltype(nullptr), remove_cv_t<T>> {
+    struct is_null_pointer : public is_same<decltype(nullptr), remove_cv_t<T>> {
 
     };
     
@@ -139,22 +139,123 @@ namespace type_categories{
     inline constexpr bool is_null_pointer_v = is_null_pointer<T>::value;
 
     template<typename T>
-    struct is_integral : false_type {
+    struct is_integral : public false_type {
 
     };
 
     template<>
-    struct is_integral<bool> : true_type {
+    struct is_integral<bool> : public true_type {
 
     };
 
     template<>
-    struct is_integral<char> : true_type {
+    struct is_integral<char> : public true_type {
+
+    };
+
+/* Since c++20
+    template<>
+    struct is_integral<char8_t> : true_type {
+
+    };
+*/
+    template<>
+    struct is_integral<char16_t> : public true_type {
+
+    };
+
+    template<>
+    struct is_integral<char32_t> : public true_type {
+
+    };
+
+    template<>
+    struct is_integral<wchar_t> : public true_type {
+
+    };
+
+    template<>
+    struct is_integral<short> : public true_type {
+
+    };
+
+    template<>
+    struct is_integral<int> : public true_type {
+
+    };
+
+    template<>
+    struct is_integral<long> : public true_type {
+
+    };
+
+    template<>
+    struct is_integral<long long> : public true_type {
 
     };
 
     template<typename T>
     inline constexpr bool is_integral_v = is_integral<T>::value;
+
+    template<typename T>
+    struct is_floating_point : public false_type {
+
+    };
+
+    template<>
+    struct is_floating_point<float> : public true_type {
+
+    };
+
+    template<>
+    struct is_floating_point<double> : public true_type {
+
+    };
+
+    template<>
+    struct is_floating_point<long double> : public true_type {
+
+    };
+
+    template<typename T>
+    inline constexpr bool is_floating_point_v = is_floating_point<T>::value;
+
+    template<typename T>
+    struct is_array : public false_type {
+
+    };
+
+    template<typename T>
+    struct is_array<T[]> : public true_type {
+        
+    };
+
+    template<typename T, std::size_t N>
+    struct is_array<T[N]> : public true_type {
+        
+    };
+
+    template<typename T>
+    inline constexpr bool is_array_v = is_array<T>::value;
+
+    enum E{};
+
+    //Note : __is_enum and __is_union is compiler feature
+    template<typename T>
+    struct is_enum : public integral_constant<bool, __is_enum(T)> {
+
+    };
+
+    template<typename T>
+    inline constexpr bool is_enum_v = is_enum<T>::value;
+
+    template<typename T>
+    struct is_union : public integral_constant<bool, __is_union(T)> {
+
+    };
+
+    template<typename T>
+    inline constexpr bool is_union_v = is_union<T>::value;
 }
 
 /*Miscellaneous transformations*/
