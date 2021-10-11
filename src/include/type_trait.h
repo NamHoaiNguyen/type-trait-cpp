@@ -265,6 +265,47 @@ namespace composite_categories {
 
     template<typename T>
     inline constexpr bool is_fundamental_v = is_fundamental<T>::value;
+
+    template< class T >
+    struct is_scalar : public std::integral_constant<bool,
+                        is_arithmetic_v<T>     ||
+                        is_enum_v<T>           ||
+                        is_pointer_v<T>        ||
+                        // is_member_pointer_v<T> ||
+                        is_null_pointer_v<T>> { };
+
+    template<typename T>
+    inline constexpr bool is_scalar_v = is_scalar<T>::value;
+
+    template< class T>
+    struct is_object : public integral_constant<bool,
+                        is_scalar_v<T> ||
+                        is_array_v<T>  ||
+                        is_union_v<T>  ||
+                        is_class_v<T>> { };
+
+    template<typename T>
+    inline constexpr bool is_object_v = is_object<T>::value;
+
+    template<typename T>
+    struct is_compound : public integral_constant<bool, 
+                                                  !is_fundamental_v<T>>
+                                                  { };
+
+    template<typename T>
+    inline constexpr bool is_compound_v = is_compound<T>::value;     
+
+    template<typename T>
+    struct is_reference : public false_type { };
+    
+    template<typename T>
+    struct is_reference<T&> : public true_type { };
+
+    template<typename T>
+    struct is_reference<T&&> : public true_type { };
+
+    template<typename T>
+    inline constexpr bool is_reference_v = is_reference<T>::value;
 }
 
 /*Miscellaneous transformations*/

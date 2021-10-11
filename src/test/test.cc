@@ -114,10 +114,24 @@ BOOST_AUTO_TEST_CASE(test_composite_categories) {
     BOOST_TEST(bool(is_arithmetic_v<char&&>) == false);
 
     BOOST_TEST(bool(is_fundamental_v<C>) == false);
-    // BOOST_TEST(bool(is_fundamental_v<int>) == true);
-    // BOOST_TEST(bool(is_fundamental_v<decltype(nullptr)>) == true);
-    // BOOST_TEST(bool(is_fundamental_v<void>) == true);
+    BOOST_TEST(bool(is_fundamental_v<int>) == true);
+    BOOST_TEST(bool(is_fundamental_v<decltype(nullptr)>) == true);
+    BOOST_TEST(bool(is_fundamental_v<void>) == true);
 
+    BOOST_TEST(bool(is_scalar_v<C>) == false);
+    BOOST_TEST(bool(is_scalar_v<int** const volatile>) == true);
+
+    BOOST_TEST(bool(is_object_v<int>) == true);
+    BOOST_TEST(bool(is_object_v<int&>) == false);
+    BOOST_TEST(bool(is_object_v<C>) == true);
+    BOOST_TEST(bool(is_object_v<C&>) == false);
+
+    BOOST_TEST(bool(is_compound_v<C>) == true);
+    BOOST_TEST(bool(is_compound_v<int>) == false);
+
+    BOOST_TEST(bool(is_reference_v<C>) == false);
+    BOOST_TEST(bool(is_reference_v<C&>) == true);
+    BOOST_TEST(bool(is_reference_v<C&&>) == true);
 }
 
 BOOST_AUTO_TEST_CASE(test_reference) {
