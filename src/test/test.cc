@@ -80,7 +80,44 @@ BOOST_AUTO_TEST_CASE(test_type_categories) {
 
     union U{};
     BOOST_TEST(bool(is_enum_v<E>) == true);
+
     BOOST_TEST(bool(is_union_v<U>) == true);
+    BOOST_TEST(bool(is_union_v<E>) == false);
+
+    BOOST_TEST(bool(is_class_v<C>) == true);
+    BOOST_TEST(bool(is_class_v<E>) == false);
+
+    BOOST_TEST(bool(is_pointer_v<int*>) ==  true);
+    BOOST_TEST(bool(is_pointer_v<C**>) ==  true);
+    BOOST_TEST(bool(is_pointer_v<float&&>) ==  false);
+
+    BOOST_TEST(bool(is_lvalue_reference_v<C>) ==  false);
+    BOOST_TEST(bool(is_lvalue_reference_v<C&>) ==  true);
+    BOOST_TEST(bool(is_lvalue_reference_v<C&&>) ==  false);
+
+    BOOST_TEST(bool(is_rvalue_reference_v<C>) ==  false);
+    BOOST_TEST(bool(is_rvalue_reference_v<C&>) ==  false);
+    BOOST_TEST(bool(is_rvalue_reference_v<C&&>) ==  true);
+
+}
+
+BOOST_AUTO_TEST_CASE(test_composite_categories) {
+    using namespace composite_categories;
+
+    class C {};
+    BOOST_TEST(bool(is_arithmetic_v<C>) == false);
+    BOOST_TEST(bool(is_arithmetic_v<int>) == true);
+    BOOST_TEST(bool(is_arithmetic_v<int const>) == false); /*true?*/ 
+    BOOST_TEST(bool(is_arithmetic_v<float>) == true);
+    BOOST_TEST(bool(is_arithmetic_v<float const&>) == false);
+    BOOST_TEST(bool(is_arithmetic_v<char>) == true);
+    BOOST_TEST(bool(is_arithmetic_v<char&&>) == false);
+
+    BOOST_TEST(bool(is_fundamental_v<C>) == false);
+    // BOOST_TEST(bool(is_fundamental_v<int>) == true);
+    // BOOST_TEST(bool(is_fundamental_v<decltype(nullptr)>) == true);
+    // BOOST_TEST(bool(is_fundamental_v<void>) == true);
+
 }
 
 BOOST_AUTO_TEST_CASE(test_reference) {
