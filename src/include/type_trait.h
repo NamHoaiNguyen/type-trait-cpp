@@ -320,44 +320,20 @@ namespace composite_categories {
     inline constexpr bool is_reference_v = is_reference<T>::value;
 }
 
-/*Miscellaneous transformations*/
-namespace transformation {
-    template<bool B, typename T = void>
-    struct enable_if {
-        
-    };
+namespace type_properties {
 
-    template<typename T>
-    struct enable_if<true, T> {
-        using type = T;
-    };
-
-    template<bool B, class T = void>
-    using enable_if_t = typename enable_if<B, T>::type;
 }
 
-// /*Type relationships*/
-// namespace type_relationships {
-//     template<typename T, typename U>
-//     struct is_same : public false_type {
+namespace supported_operations {
 
-//     };
+}
 
-//     template<typename T>
-//     struct is_same<T, T> : public true_type {
+namespace property_queries {
 
-//     };
-
-//     template<typename T, typename U>
-//     inline constexpr bool is_same_v = is_same<T, U>::value;
-// }
-
-
-/*const-volatility specifiers*/
-
+}
 
 /*Reference*/
-namespace reference {
+namespace references {
     template<typename T>
     struct remove_reference {
         using type = T;
@@ -385,7 +361,7 @@ namespace reference {
 }
 
 /*Pointer*/
-namespace pointer {
+namespace pointers {
     template<typename T>
     struct remove_pointer {
 
@@ -414,7 +390,43 @@ namespace pointer {
     // template<typename T>
     // using remove_pointer_t = typename remove_pointer<T>::type;
     template<typename T>
-    using remove_pointer_t = typename pointer::remove_pointer<T>::type;
+    using remove_pointer_t = typename remove_pointer<T>::type;
+}
+
+namespace sign_modifiers {
+
+}
+
+namespace arrays {
+
+}
+
+/*Miscellaneous transformations*/
+namespace miscellaneous_transformation {
+    template<bool B, typename T = void>
+    struct enable_if {
+        
+    };
+
+    template<typename T>
+    struct enable_if<true, T> {
+        using type = T;
+    };
+
+    template<bool B, class T = void>
+    using enable_if_t = typename enable_if<B, T>::type;
+}
+
+namespace operations_on_traits {
+
+}
+
+namespace members_relationships {
+
+}
+
+namespace constant_evaluation_context {
+
 }
 
 // template<typename T>

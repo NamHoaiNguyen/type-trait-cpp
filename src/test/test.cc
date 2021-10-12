@@ -137,8 +137,27 @@ BOOST_AUTO_TEST_CASE(test_composite_categories) {
     BOOST_TEST(bool(is_member_pointer_v<int>) == false);
 }
 
-BOOST_AUTO_TEST_CASE(test_reference) {
-    using namespace reference;
+BOOST_AUTO_TEST_CASE(test_type_properties) {
+    using namespace type_properties;
+
+    TEST_LOG();
+}
+
+BOOST_AUTO_TEST_CASE(test_supported_operations_) {
+    using namespace supported_operations;
+
+    TEST_LOG();
+}
+
+BOOST_AUTO_TEST_CASE(test_property_queries) {
+    using namespace property_queries;
+
+    TEST_LOG();
+}
+
+
+BOOST_AUTO_TEST_CASE(test_references) {
+    using namespace references;
     using namespace type_relationships;
 
     TEST_LOG();
@@ -149,7 +168,7 @@ BOOST_AUTO_TEST_CASE(test_reference) {
 }
 
 BOOST_AUTO_TEST_CASE(test_pointer) {
-    using namespace pointer;
+    using namespace pointers;
     using namespace type_relationships;
 
     TEST_LOG();
@@ -158,3 +177,39 @@ BOOST_AUTO_TEST_CASE(test_pointer) {
     BOOST_TEST(bool(is_same_v<remove_pointer_t<int* const volatile>, int>) == true);
     BOOST_TEST(bool(is_same_v<remove_pointer_t<int*>, float>) == false);
 } 
+
+BOOST_AUTO_TEST_CASE(test_sign_modifiers) {
+    using namespace sign_modifiers;
+
+    TEST_LOG();
+}
+
+BOOST_AUTO_TEST_CASE(test_arrays) {
+    using namespace arrays;
+
+    TEST_LOG();
+}
+
+BOOST_AUTO_TEST_CASE(test_miscellaneous_transformation) {
+    using namespace miscellaneous_transformation;
+
+    TEST_LOG();
+}
+
+BOOST_AUTO_TEST_CASE(test_operations_on_traits) {
+    using namespace operations_on_traits;
+
+    TEST_LOG();
+}
+
+BOOST_AUTO_TEST_CASE(test_member_relationships) {
+    using namespace members_relationships;
+
+    TEST_LOG();
+}
+
+BOOST_AUTO_TEST_CASE(test_constant_evaluation_context) {
+    using namespace constant_evaluation_context;
+    
+    TEST_LOG();
+}
