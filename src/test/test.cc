@@ -132,6 +132,9 @@ BOOST_AUTO_TEST_CASE(test_composite_categories) {
     BOOST_TEST(bool(is_reference_v<C>) == false);
     BOOST_TEST(bool(is_reference_v<C&>) == true);
     BOOST_TEST(bool(is_reference_v<C&&>) == true);
+
+    BOOST_TEST(bool(is_member_pointer_v<int(C::*)>) == true);
+    BOOST_TEST(bool(is_member_pointer_v<int>) == false);
 }
 
 BOOST_AUTO_TEST_CASE(test_reference) {

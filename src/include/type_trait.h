@@ -266,12 +266,24 @@ namespace composite_categories {
     template<typename T>
     inline constexpr bool is_fundamental_v = is_fundamental<T>::value;
 
+    template<typename T>
+    struct is_member_pointer_helper : public false_type { };
+
+    template<typename T, typename U>
+    struct is_member_pointer_helper<T U::*> : public true_type { };
+
+    template<typename T>
+    struct is_member_pointer : public is_member_pointer_helper<remove_cv_t<T>> { };
+
+    template<typename T>
+    inline constexpr bool is_member_pointer_v = is_member_pointer<T>::value;
+
     template< class T >
     struct is_scalar : public std::integral_constant<bool,
                         is_arithmetic_v<T>     ||
                         is_enum_v<T>           ||
                         is_pointer_v<T>        ||
-                        // is_member_pointer_v<T> ||
+                        is_member_pointer_v<T> ||
                         is_null_pointer_v<T>> { };
 
     template<typename T>
