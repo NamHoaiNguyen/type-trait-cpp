@@ -141,6 +141,29 @@ BOOST_AUTO_TEST_CASE(test_type_properties) {
     using namespace type_properties;
 
     TEST_LOG();
+
+    class C{};
+
+    BOOST_TEST(bool(is_const_v<int>) == false);
+    BOOST_TEST(bool(is_const_v<const int>) == true);
+    BOOST_TEST(bool(is_const_v<const int*>) == false);
+    BOOST_TEST(bool(is_const_v<int* const>) == true);
+
+    BOOST_TEST(bool(is_bounded_array_v<C>) == false);
+    BOOST_TEST(bool(is_bounded_array_v<C[]>) == false);
+    BOOST_TEST(bool(is_bounded_array_v<C[3]>) == true);
+
+    BOOST_TEST(bool(is_unbounded_array_v<C>) == false);
+    BOOST_TEST(bool(is_unbounded_array_v<C[]>) == true);
+    BOOST_TEST(bool(is_unbounded_array_v<C[3]>) == false);
+
+    BOOST_TEST(bool(is_signed_v<float>) == true);
+    BOOST_TEST(bool(is_signed_v<signed int>) == true);
+    BOOST_TEST(bool(is_signed_v<unsigned int>) == false);
+
+    BOOST_TEST(bool(is_unsigned_v<float>) == false);
+    BOOST_TEST(bool(is_unsigned_v<signed int>) == false);
+    BOOST_TEST(bool(is_unsigned_v<unsigned int>) == false);
 }
 
 BOOST_AUTO_TEST_CASE(test_supported_operations_) {

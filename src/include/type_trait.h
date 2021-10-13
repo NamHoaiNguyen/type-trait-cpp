@@ -321,7 +321,67 @@ namespace composite_categories {
 }
 
 namespace type_properties {
+    using namespace composite_categories;
 
+    template<typename T>
+    struct is_const : public false_type { };
+
+    template<typename T>
+    struct is_const<const T> : public true_type { };
+
+    template<typename T>
+    inline constexpr bool is_const_v = is_const<T>::value;
+
+    template<typename T>
+    struct is_volatile : public false_type { };
+
+    template<typename T>
+    struct is_volatile<volatile T> : public true_type { };
+
+    template<typename T>
+    inline constexpr bool is_volatile_v = is_volatile<T>::value;
+
+    template<typename T, bool = is_arithmetic_v<T>>
+    struct is_signed_helper : public integral_constant<bool, T(-1) < T(0)> { };
+
+    template<typename T>
+    struct is_signed_helper<T, false> : public false_type { };
+
+    template<typename T>
+    struct is_signed : public is_signed_helper<T> { };
+
+    template<typename T>
+    inline constexpr bool is_signed_v = is_signed<T>::value;
+
+    template<typename T, bool = is_arithmetic_v<T>>
+    struct is_unsigned_helper : public integral_constant<bool, T(0) < T(-1)> { };
+
+    template<typename T>
+    struct is_unsigned_helper<T, false> : public false_type { };
+
+    template<typename T>
+    struct is_unsigned : public is_unsigned_helper<T> { };
+
+    template<typename T>
+    inline constexpr bool is_unsigned_v = is_unsigned<T>::value;
+
+    template<typename T>
+    struct is_bounded_array : public false_type { };
+
+    template<typename T, std::size_t N>
+    struct is_bounded_array<T[N]> : public true_type { };
+
+    template<typename T>
+    inline constexpr bool is_bounded_array_v = is_bounded_array<T>::value;
+
+    template<typename T>
+    struct is_unbounded_array : public false_type { };
+
+    template<typename T>
+    struct is_unbounded_array<T[]> : public true_type { };
+
+    template<typename T>
+    inline constexpr bool is_unbounded_array_v = is_unbounded_array<T>::value;
 }
 
 namespace supported_operations {
