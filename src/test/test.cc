@@ -215,8 +215,12 @@ BOOST_AUTO_TEST_CASE(test_arrays) {
 
 BOOST_AUTO_TEST_CASE(test_miscellaneous_transformation) {
     using namespace miscellaneous_transformation;
+    using namespace type_relationships;
 
     TEST_LOG();
+
+    BOOST_TEST(bool(is_same_v<conditional_t<true, int, double>, int>) == true);
+    BOOST_TEST(bool(is_same_v<conditional_t<false, int, double>, double>) == true);
 }
 
 BOOST_AUTO_TEST_CASE(test_operations_on_traits) {

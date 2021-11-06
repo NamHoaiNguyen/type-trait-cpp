@@ -464,9 +464,7 @@ namespace arrays {
 /*Miscellaneous transformations*/
 namespace miscellaneous_transformation {
     template<bool B, typename T = void>
-    struct enable_if {
-        
-    };
+    struct enable_if { };
 
     template<typename T>
     struct enable_if<true, T> {
@@ -475,6 +473,19 @@ namespace miscellaneous_transformation {
 
     template<bool B, class T = void>
     using enable_if_t = typename enable_if<B, T>::type;
+
+    template<bool B, typename T, typename U>
+    struct conditional { 
+        using type = T;
+    };
+
+    template<typename T, typename U>
+    struct conditional<false, T, U> {
+        using type = U;
+    };
+
+    template<bool B, typename T, typename U>
+    using conditional_t = typename conditional<B, T, U>::type;
 }
 
 namespace operations_on_traits {
