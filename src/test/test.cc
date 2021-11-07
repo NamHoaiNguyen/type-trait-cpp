@@ -99,6 +99,8 @@ BOOST_AUTO_TEST_CASE(test_type_categories) {
     BOOST_TEST(bool(is_rvalue_reference_v<C&>) ==  false);
     BOOST_TEST(bool(is_rvalue_reference_v<C&&>) ==  true);
 
+    BOOST_TEST(bool(is_function<int(int)>::value) == true);
+    BOOST_TEST(bool(is_function<A>::value) == false);
 }
 
 BOOST_AUTO_TEST_CASE(test_composite_categories) {
