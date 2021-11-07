@@ -209,8 +209,19 @@ BOOST_AUTO_TEST_CASE(test_sign_modifiers) {
 
 BOOST_AUTO_TEST_CASE(test_arrays) {
     using namespace arrays;
+    using namespace type_relationships;
 
     TEST_LOG();
+
+    struct S{
+
+    };
+
+    BOOST_TEST(bool(is_same_v<remove_extent_t<int[]>, int>) == true);
+    BOOST_TEST(bool(is_same_v<remove_extent_t<S[100]>, S>) == true);
+
+    BOOST_TEST(bool(is_same_v<remove_all_extents_t<float[1][2][3]>, float>) == true);
+    BOOST_TEST(bool(is_same_v<remove_all_extents_t<S[1][2][3]>, S>) == true);
 }
 
 BOOST_AUTO_TEST_CASE(test_miscellaneous_transformation) {

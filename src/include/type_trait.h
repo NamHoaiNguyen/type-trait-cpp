@@ -394,6 +394,8 @@ namespace property_queries {
 
 /*Reference*/
 namespace references {
+    using namespace composite_categories;
+
     template<typename T>
     struct remove_reference {
         using type = T;
@@ -412,12 +414,22 @@ namespace references {
     template<typename T>
     using remove_reference_t = typename remove_reference<T>::type;
 
-    template<typename T>
-    struct add_lvalue_referece {
-
-    };
+    //template<typename T, bool B = is_reference_v<T>>
+    // struct add_lvalue_reference_helper {
+    //     using type = T;
+    // };
 
     // template<typename T>
+    // struct add_lvalue_reference_helper<T, true> {
+    //     using type = T&;
+    // };
+
+    // template<typename T>
+    // struct add_lvalue_reference : struct add_lvalue_reference_helper { };
+
+    // template<typename T>
+    // using add_lvalue_reference_t = typename add_lvalue_reference<T>::type;
+
 }
 
 /*Pointer*/
@@ -458,7 +470,43 @@ namespace sign_modifiers {
 }
 
 namespace arrays {
+    template<typename T>
+    struct remove_extent {
+        using type = T;
+    };
 
+    template<typename T>
+    struct remove_extent<T[]> {
+        using type = T;
+    };
+
+    template<typename T, std::size_t N>
+    struct remove_extent<T[N]> {
+        using type = T;
+    };
+
+    template<typename T>
+    using remove_extent_t = typename remove_extent<T>::type;
+
+    template<typename T>
+    struct remove_all_extents {
+        using type = T;
+    };
+
+    template<typename T>
+    struct remove_all_extents<T[]> {
+        using type = typename remove_all_extents<T>::type;
+//        typedef typename remove_all_extents<T>::type type;
+    };
+
+    template<typename T, std::size_t N>
+    struct remove_all_extents<T[N]> {
+       using type = typename remove_all_extents<T>::type;
+        // typedef typename remove_all_extents<T>::type type;
+    };
+
+    template<typename T>
+    using remove_all_extents_t = typename remove_all_extents<T>::type;
 }
 
 /*Miscellaneous transformations*/
