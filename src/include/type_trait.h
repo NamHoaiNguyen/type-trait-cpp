@@ -77,6 +77,29 @@ namespace type_relationships {
 
     template<typename T, typename U>
     inline constexpr bool is_same_v = is_same<T, U>::value;
+
+    /*is_base_of*/
+    template<typename B>
+    std::true_type test_pre_ptr_convertible(const volatile B*);
+
+    template<typename>
+    std::false_type test_pre_ptr_convertible(const volatile void*);
+
+    /*For multiple inheritance*/
+    template<typename B, typename D>
+    auto test_pre_is_base_of(int) -> decltype(test_pre_ptr_convertible<B>(static_cast<D*>(nullptr)));
+
+    template<typename, typename>
+    auto test_pre_is_base_of(...) -> std::true_type;
+
+    template<typename Base, typename Derived>
+    struct is_base_of : public std::integral_constant<
+                            bool,
+                            std::is_class_v<Base> && std::is_class_v<Derived> &&
+                            decltype(test_pre_is_base_of<Base, Derived>(0))::value>
+    {
+
+    };
 }
 
 /*Prmary type categories*/

@@ -38,6 +38,15 @@ BOOST_AUTO_TEST_CASE(test_type_relationship) {
     BOOST_TEST(bool(is_same_v<int, int>) == true);
     BOOST_TEST(bool(is_same_v<int, float>) == false);
     // BOOST_TEST(bool(is_void_v<void const volatile>) == true);
+
+    struct Base { };
+    struct Derived1 : public Base { };
+    struct Derived2 : public Base { };
+    struct Multi : public Derived1, public Derived2 { };
+
+    BOOST_TEST(bool(is_base_of<Base, Base>::value) == true);
+    BOOST_TEST(bool(is_base_of<Base, Derived1>::value) == true);
+    BOOST_TEST(bool(is_base_of<Base, Multi>::value) == true);
 }
 
 BOOST_AUTO_TEST_CASE(test_type_categories) {
