@@ -201,7 +201,7 @@ namespace type_categories{
 
     template<typename T, std::size_t N>
     struct is_array<T[N]> : public true_type { };
-
+     
     template<typename T>
     inline constexpr bool is_array_v = is_array<T>::value;
 
@@ -220,8 +220,29 @@ namespace type_categories{
     template<typename T>
     inline constexpr bool is_union_v = is_union<T>::value;
 
+    // template<typename T>
+    // struct is_class : public integral_constant<bool, __is_class(T)> { };
+
+    // template<typename T>
+    // inline constexpr bool is_class_v = is_class<T>::value;
+
     template<typename T>
-    struct is_class : public integral_constant<bool, __is_class(T)> { };
+    char test_pre_is_class(int T::*); 
+
+    struct two {
+        char c[2];
+    };
+
+    template<typename T>
+    two test_pre_is_class(...); 
+
+    template<typename T>
+    struct is_class : std::integral_constant<bool,
+                                            !std::is_union<T>::value &&
+                                            sizeof(test_pre_is_class<T>(0)) == 1>
+    {
+
+    };
 
     template<typename T>
     inline constexpr bool is_class_v = is_class<T>::value;
@@ -269,7 +290,6 @@ namespace type_categories{
     // primary template
 
     /*Link: https://en.cppreference.com/w/cpp/types*/
-
     template<class>
     struct is_function : std::false_type { };
     
@@ -685,6 +705,36 @@ namespace members_relationships {
 
 namespace constant_evaluation_context {
 
+}
+
+namespace extension {
+    // template<typename T, typename = void>
+    // struct is_iterable : std::false_type {
+
+    // };
+
+    // template<typename T>
+    // struct is_iterable : std::decltype(std::begin(std::declval<T>))
+
+    // template<typename T>
+    // constexpr bool is_iterable_v = is_iterable<T>::value;
+
+    
+    template<typename T>
+    class has_update_method {
+        private:
+            template<typename C>
+            static char test(decltype(&C::update));
+            
+            template<typename C>
+            static long test(...);
+
+        public:
+            static constexpr bool value = sizeof(test<T>(0)) == sizeof(char);
+    };
+
+    template<typename T>
+    constexpr bool has_method_update_v = has_update_method<T>::value;
 }
 
 // template<typename T>

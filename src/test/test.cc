@@ -262,3 +262,16 @@ BOOST_AUTO_TEST_CASE(test_constant_evaluation_context) {
     
     TEST_LOG();
 }
+
+BOOST_AUTO_TEST_CASE(test_extension) {
+    using namespace extension;
+    using namespace type_relationships;
+
+    TEST_LOG();
+
+    struct C{
+        void update();
+    };
+
+    BOOST_TEST(bool(has_method_update_v<C>) == true);
+}
